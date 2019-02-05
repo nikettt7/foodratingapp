@@ -1,8 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import './app_screens/home_widget.dart';
 import './app_screens/placeholder_widget.dart';
 //import './app_screens/products.dart';
+import 'package:flutter/services.dart';
+import 'package:location/location.dart';
+import 'package:geocoder/geocoder.dart';
+
 
 
 void main() {
@@ -18,9 +24,71 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  StreamSubscription<Map<String, double>> _locationSubscription;
+  Location _location = new Location();
+  bool _permission = false;
+  String error;
+  List<Address> addresses;
+  String address="Your Current Address";
+  Map<String, double> _currentLocation;
+  Map<String, double> _startLocation;
+
+
+
+
+
   @override
-  Widget build(BuildContext context) {
-    Widget image_carousel = new Container(
+  void initState() {
+    super.initState();
+
+    initPlatformState();
+
+    _locationSubscription =
+        _location.onLocationChanged().listen((Map<String, double> result) {
+      setState(() {
+        _currentLocation = result;
+      });
+    });
+  }
+
+    initPlatformState() async {
+    Map<String, double> location;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+
+      try {
+        _permission = await _location.hasPermission();
+        location = await _location.getLocation();
+
+        error = null;
+        final coordinates =
+        new Coordinates(location["latitude"], location["longitude"]);
+
+        if (_permission) {
+          addresses =
+          await Geocoder.local.findAddressesFromCoordinates(coordinates);
+          address = addresses.first.addressLine;
+        }
+      } on PlatformException catch (e) {
+        if (e.code == 'PERMISSION_DENIED') {
+          error = 'Permission denied';
+        } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
+          error =
+          'Permission denied - please ask the user to enable it from the app settings';
+        }
+
+        location = null;
+      }
+
+      setState(() {
+        _startLocation = location;
+      });
+
+  }
+
+
+
+  Widget build(BuildContext context) {                    //currently only image carasoul added
+    Widget image_carousel = new Container(                //pics cant be clicked
       height: 200.0,
       child:  new Carousel(
         boxFit: BoxFit.cover,
@@ -45,7 +113,7 @@ class _HomePageState extends State<HomePage> {
       appBar: new AppBar(
         elevation: 0.1,
         backgroundColor: Colors.white,
-        title: Text("Your location",style:TextStyle(height:100.0,color:Colors.red,),),            //add address here
+        title: Text(address,style:TextStyle(height:100.0,color:Colors.red,),),            //add address here
         actions: <Widget>[
           new IconButton(
               icon: Icon(
@@ -108,7 +176,7 @@ class _HomePageState extends State<HomePage> {
             InkWell(
               onTap: (){},
               child: ListTile(
-                title: Text('Categoris'),
+                title: Text('Categories'),
                 leading: Icon(Icons.dashboard),
               ),
             ),
@@ -161,7 +229,7 @@ class _HomePageState extends State<HomePage> {
           //grid view
           Container(
             height: 320.0,
-            //child: Products(),
+            child: Products(),
           )
         ],
       ),
