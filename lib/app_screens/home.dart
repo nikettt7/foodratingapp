@@ -2,23 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import './app_screens/home_widget.dart';
-import './app_screens/placeholder_widget.dart';
-import './app_screens/products.dart';
+import 'home_widget.dart';
+import 'placeholder_widget.dart';
+import 'products.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
-//import 'signup.dart';
 
 
-
-
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: HomePage(),
-  ));
-}
 
 class HomePage extends StatefulWidget {
   @override

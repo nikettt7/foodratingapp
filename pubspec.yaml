@@ -19,6 +19,7 @@ dependencies:
   geocoder: ^0.1.2
   carousel_pro: ^0.0.13
   google_sign_in: ^4.0.1
+  #firebase_auth: ^
 
 
   # The following adds the Cupertino Icons font to your application.
