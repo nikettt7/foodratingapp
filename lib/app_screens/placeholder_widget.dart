@@ -60,9 +60,11 @@ class Category extends StatelessWidget {
               ),
               subtitle: Container(
                 alignment: Alignment.topCenter,
-                child: Text(image_caption, style: new TextStyle(fontSize: 12.0),),
-              )
-          ),
+                child: Text(
+                  image_caption,
+                  style: new TextStyle(fontSize: 12.0),
+                ),
+              )),
         ),
       ),
     );
