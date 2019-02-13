@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'home_widget.dart';
-import 'placeholder_widget.dart';
+import 'home_carousel.dart';
 import 'products.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
